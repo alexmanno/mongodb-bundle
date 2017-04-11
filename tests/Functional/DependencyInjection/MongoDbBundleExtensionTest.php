@@ -72,10 +72,6 @@ class MongoDbBundleExtensionTest extends AbstractExtensionTestCase
         self::assertCount(2, $ed->getListeners());
         self::assertCount(1, $ed->getListeners(QueryEvent::QUERY_EXECUTED));
         self::assertCount(1, $ed->getListeners(ConnectionEvent::CLIENT_CREATED));
-
-        $this->assertContainerBuilderHasParameter('mongo.connection.list');
-        $connections = $this->container->getParameter('mongo.connection.list');
-        $this->assertEquals(['test_db'], $connections);
     }
 
     public function test_load_data_collection_disabled()
@@ -224,10 +220,6 @@ class MongoDbBundleExtensionTest extends AbstractExtensionTestCase
         $testConnection = $this->container->get('mongo.connection.test_db_2');
         $this->assertInstanceOf(Database::class, $testConnection);
         $this->assertSame('testdb_2', $testConnection->getDatabaseName());
-
-        $this->assertContainerBuilderHasParameter('mongo.connection.list');
-        $connections = $this->container->getParameter('mongo.connection.list');
-        $this->assertEquals(['test_db', 'other_db', 'test_db_2'], $connections);
 
         /** @var ClientRegistry $registry */
         $registry = $this->container->get('mongo.client_registry');
