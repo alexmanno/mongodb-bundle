@@ -16,6 +16,8 @@ final class ClientRegistry
 {
     /** @var Client[] */
     private $clients;
+    /** @var string[] */
+    private $connections;
     /** @var ClientConfiguration[] */
     private $configurations;
     /** @var string */
@@ -34,6 +36,7 @@ final class ClientRegistry
     public function __construct(EventDispatcherInterface $eventDispatcher, string $environment)
     {
         $this->clients = [];
+        $this->connections = [];
         $this->configurations = [];
         $this->environment = $environment;
         $this->eventDispatcher = $eventDispatcher;
@@ -97,13 +100,17 @@ final class ClientRegistry
     }
 
     /**
-     * @param string $name
-     * @param string $databaseName
+     * @param string      $name
+     * @param string      $databaseName
+     * @param string|null $connectionName
      *
      * @return Client
      */
-    public function getClientForDatabase(string $name, string $databaseName): Client
+    public function getClientForDatabase(string $name, string $databaseName, string $connectionName = null): Client
     {
+        if (!empty($connectionName)) {
+            $this->connections[] = $connectionName;
+        }
         return $this->getClient($name, $databaseName);
     }
 
@@ -113,6 +120,14 @@ final class ClientRegistry
     public function getClientNames(): array
     {
         return array_keys($this->clients);
+    }
+
+    /**
+     * @return array
+     */
+    public function getConnectionNames(): array
+    {
+        return $this->connections;
     }
 
     /**

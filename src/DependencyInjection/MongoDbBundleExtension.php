@@ -124,9 +124,10 @@ final class MongoDbBundleExtension extends Extension
                 [
                     $conf['client_name'],
                     $conf['database_name'],
+                    $name
                 ]
             );
-            $connectionDefinition->setFactory([new Reference('mongo.connection_factory'), 'createConnection']);
+            $connectionDefinition->setFactory([new Reference('mongo.connection_factory'), 'createNamedConnection']);
             $this->containerBuilder->setDefinition('mongo.connection.'.$name, $connectionDefinition);
         }
         $this->containerBuilder->setAlias('mongo.connection', 'mongo.connection.'.array_keys($connections)[0]);

@@ -28,11 +28,26 @@ final class ConnectionFactory
      * @param string $databaseName
      *
      * @return Database
+     *
+     * @deprecated
      */
     public function createConnection(string $clientName, string $databaseName): Database
     {
         return $this->clientRegistry
             ->getClientForDatabase($clientName, $databaseName)
+            ->selectDatabase($databaseName);
+    }
+
+    /**
+     * @param string $clientName
+     * @param string $databaseName
+     *
+     * @return Database
+     */
+    public function createNamedConnection(string $clientName, string $databaseName, $connectionName): Database
+    {
+        return $this->clientRegistry
+            ->getClientForDatabase($clientName, $databaseName, $connectionName)
             ->selectDatabase($databaseName);
     }
 }
